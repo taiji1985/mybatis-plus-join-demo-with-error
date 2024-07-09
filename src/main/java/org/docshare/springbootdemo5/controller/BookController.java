@@ -3,6 +3,7 @@ package org.docshare.springbootdemo5.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.yulichang.toolkit.JoinWrappers;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.docshare.springbootdemo5.entity.Book;
 import org.docshare.springbootdemo5.entity.Usr;
@@ -49,10 +50,11 @@ public class BookController {
 
     @RequestMapping("/list2")
     public Ret list2(){
-        MPJLambdaWrapper<Book> wrapper = new MPJLambdaWrapper<>();
-        wrapper.selectAll();
-                //.selectAs(Usr::getName,Book::getAuthorName)
-                //.leftJoin(Usr.class,Usr::getId,Book::getAuthorId);
+        MPJLambdaWrapper<Book> wrapper = JoinWrappers.lambda(Book.class);
+        //wrapper.setEntityClass(Book.class);
+        wrapper.selectAll()
+                .selectAs(Usr::getName,Book::getAuthorName)
+                .leftJoin(Usr.class,Usr::getId,Book::getAuthorId);
 
 
         List<Book> list = bookService.list(wrapper);
